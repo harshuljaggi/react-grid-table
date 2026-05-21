@@ -1,34 +1,35 @@
-import { useRef } from "react";
-import { useVirtual } from "react-virtual";
+import { useMemo } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 const useRowVirtualizer = (props, tableManager) => {
-    const {
-        config: {
-            isPaginated,
-            isVirtualScroll,
-            additionalProps: { rowVirtualizer: rowVirtualizerProps },
-        },
-        refs: { tableRef },
-        paginationApi: { page, pageSize, totalPages },
-        rowsApi: { totalRows },
-    } = tableManager;
+  const {
+    config: {
+      isPaginated,
+      isVirtualScroll,
+      additionalProps: { rowVirtualizer: rowVirtualizerProps },
+    },
+    refs: { tableRef },
+    paginationApi: { page, pageSize, totalPages },
+    rowsApi: { totalRows },
+  } = tableManager;
 
-    const rowVirtualizer = useRef({}).current;
+  const rowCount = useMemo(() => {
+    if (!isPaginated) return totalRows;
 
-    const useVirtualProps = {
-        size: isPaginated
-            ? totalPages === page
-                ? totalRows - (totalPages - 1) * pageSize
-                : pageSize
-            : totalRows,
-        overscan: 20,
-        parentRef: isVirtualScroll ? tableRef : {},
-        ...rowVirtualizerProps,
-    };
+    return totalPages === page
+      ? totalRows - (totalPages - 1) * pageSize
+      : pageSize;
+  }, [isPaginated, totalRows, totalPages, page, pageSize]);
 
-    Object.assign(rowVirtualizer, useVirtual(useVirtualProps));
+  const rowVirtualizer = useVirtualizer({
+    count: rowCount,
+    getScrollElement: () => (isVirtualScroll ? tableRef?.current : null),
+    estimateSize: () => 35,
+    overscan: 20,
+    ...rowVirtualizerProps,
+  });
 
-    return rowVirtualizer;
+  return rowVirtualizer;
 };
 
 export default useRowVirtualizer;

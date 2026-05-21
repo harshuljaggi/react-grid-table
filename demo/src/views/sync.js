@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
+
 import GridTable from "../../../src";
 import { ControllersDrawer } from "../components";
 import getColumns from "../getColumns";
 import MOCK_DATA from "../MOCK_DATA.json";
 import "../index.css";
+
+const container = document.getElementById("root");
+const root = createRoot(container);
 
 const MyAwesomeTable = () => {
     const [, setTableManager] = useState(null);
@@ -122,4 +126,4 @@ const MyAwesomeTable = () => {
 
 export default MyAwesomeTable;
 
-ReactDOM.render(<MyAwesomeTable />, document.getElementById("root"));
+root.render(<MyAwesomeTable/>);

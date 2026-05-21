@@ -12,11 +12,17 @@ module.exports = {
         filename: '[name].js'
     },
     devServer: {
-        publicPath: path.join(__dirname, '/dist'),
-        contentBase: path.join(__dirname, '/dist'),
-        port: 9000,
-        writeToDisk: true
+    static: {
+        directory: path.join(__dirname, "dist"),
     },
+    devMiddleware: {
+        writeToDisk: true,
+    },
+    port: 9000,
+    hot: true,
+    open: true,
+    historyApiFallback: true,
+},
     module: {
         rules: [
             {

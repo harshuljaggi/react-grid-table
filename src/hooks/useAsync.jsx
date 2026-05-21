@@ -9,7 +9,7 @@ function getRowsRequest(tableManager, rowsRequests) {
         searchApi: { searchText },
         sortApi: { sort },
         paginationApi: { page, pageSize },
-        rowVirtualizer: { virtualItems },
+        rowVirtualizer: { getVirtualItems },
         asyncApi: { batchSize },
     } = tableManager;
 
@@ -19,8 +19,8 @@ function getRowsRequest(tableManager, rowsRequests) {
 
     // get exact indexes via virtualItems (113, 157)
     if (isVirtualScroll) {
-        from += virtualItems[0]?.index || 0;
-        to += virtualItems[virtualItems.length - 1]?.index || 0;
+        from += getVirtualItems()[0]?.index || 0;
+        to += getVirtualItems()[getVirtualItems().length - 1]?.index || 0;
     }
 
     // get the required batch limits (100, 200)

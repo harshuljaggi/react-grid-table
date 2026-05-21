@@ -27,7 +27,7 @@ const GridTable = (props) => {
         refs: { rgtRef, tableRef },
         columnsApi: { visibleColumns },
         columnsReorderApi: { onColumnReorderStart, onColumnReorderEnd },
-        rowVirtualizer: { virtualItems },
+        rowVirtualizer: { getVirtualItems },
         paginationApi: { pageRows },
         rowsApi: { totalRows },
     } = tableManager;
@@ -82,12 +82,12 @@ const GridTable = (props) => {
                                   index={"virtual-start"}
                                   tableManager={tableManager}
                               />,
-                              ...virtualItems.map((virtualizedRow) => (
+                              ...getVirtualItems().map((virtualizedRow) => (
                                   <Row
                                       key={virtualizedRow.index}
                                       index={virtualizedRow.index}
                                       data={pageRows[virtualizedRow.index]}
-                                      measureRef={virtualizedRow.measureRef}
+                                      measureElement={virtualizedRow.measureElement}
                                       tableManager={tableManager}
                                   />
                               )),

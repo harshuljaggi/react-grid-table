@@ -1,14 +1,14 @@
 import React from "react";
 import { CellContainer } from "./";
 
-const Row = ({ index, data, tableManager, measureRef }) => {
+const Row = ({ index, data, tableManager, measureElement }) => {
     const {
         config: { isVirtualScroll, rowIdField },
         rowEditApi: { editRow, getIsRowEditable },
         rowSelectionApi: { getIsRowSelectable, selectedRowsIds },
         columnsApi: { visibleColumns },
         paginationApi: { page, pageSize },
-        rowVirtualizer: { virtualItems, totalSize },
+        rowVirtualizer: { getVirtualItems, getTotalSize },
     } = tableManager;
 
     if (isVirtualScroll) {
@@ -16,7 +16,7 @@ const Row = ({ index, data, tableManager, measureRef }) => {
             return visibleColumns.map((visibleColumn) => (
                 <div
                     key={`${index}-${visibleColumn.id}`}
-                    style={{ minHeight: virtualItems[0]?.start }}
+                    style={{ minHeight: getVirtualItems()[0]?.start }}
                 />
             ));
         }
@@ -26,8 +26,8 @@ const Row = ({ index, data, tableManager, measureRef }) => {
                     key={`${index}-${visibleColumn.id}`}
                     style={{
                         minHeight:
-                            totalSize -
-                                virtualItems[virtualItems.length - 1]?.end || 0,
+                            getTotalSize() -
+                                getVirtualItems()[getVirtualItems().length - 1]?.end || 0,
                     }}
                 />
             ));
@@ -54,7 +54,7 @@ const Row = ({ index, data, tableManager, measureRef }) => {
             isSelected={isSelected}
             isEdit={isEdit}
             disableSelection={disableSelection}
-            forwardRef={colIndex === 0 ? measureRef : undefined}
+            forwardRef={colIndex === 0 ? measureElement : undefined}
             tableManager={tableManager}
         />
     ));
